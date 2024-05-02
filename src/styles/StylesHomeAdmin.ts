@@ -37,7 +37,7 @@ export const MenuLink = styled(Link)`
   font-weight: 600;
   padding: 15px 40px;
   border-radius: 8px;
-  color: ${corPrimaria};
+  color: ${corSecundaria};
   transition: all 0.5s ease-in-out;
   &:hover {
     transition: all 0.5s ease-in-out;
