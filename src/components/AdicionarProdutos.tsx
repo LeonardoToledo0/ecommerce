@@ -1,11 +1,55 @@
 import React, { useState, useEffect } from "react";
+import axios, { AxiosResponse } from "axios";
 
 import { ButtonModel, SectionProdutos } from "@/styles/StylesHomeAdmin";
 import { Titulos } from "@/styles/StylesNavbar-Menu";
 
 const AdicionarProdutos: React.FC = () => {
-  // Função para lidar com as mudanças nos campos do formulário
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [categorias, setCategorias] = useState<any[]>([]);
+  const [marcas, setMarcas] = useState<any[]>([]);
 
+  // Api Categorias
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response: AxiosResponse<any> = await axios.get(
+          "/api/obterCategorias"
+        );
+        setCategorias(response.data);
+      } catch (error) {
+        setError(
+          "Erro ao buscar categorias. Verifique sua conexão de internet e tente novamente."
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  //  Api Marcas
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response: AxiosResponse<any> = await axios.get(
+          "/api/obterMarcas"
+        );
+        setMarcas(response.data);
+      } catch (error) {
+        setError(
+          "Erro ao buscar marcas. Verifique sua conexão de internet e tente novamente."
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
   return (
     <SectionProdutos className="container-fluid col-md-12">
       <Titulos className="">Adicionar Produtos</Titulos>
@@ -33,8 +77,11 @@ const AdicionarProdutos: React.FC = () => {
             value=""
           >
             <option value="">Selecione a marca</option>
-
-            <option>opcao1</option>
+            {marcas.map((marca) => (
+              <option key={marca.id} value={marca.id}>
+                {marca.nome}
+              </option>
+            ))}
           </select>
         </div>
         <div className="form-group col-md-8 mt-3">
@@ -49,7 +96,11 @@ const AdicionarProdutos: React.FC = () => {
           >
             <option value="">Selecione a Categoria</option>
 
-            <option>opcao1</option>
+            {categorias.map((categoria) => (
+              <option key={categoria.id} value={categoria.id}>
+                {categoria.nome}
+              </option>
+            ))}
           </select>
         </div>
         <div className="form-group col-md-8 mt-3">
@@ -169,39 +220,42 @@ const AdicionarProdutos: React.FC = () => {
             name="imagem_miniatura3"
           />
         </div>
-        <div className="form-group form-check mt-3">
-          <input
-            type="checkbox"
-            className="form-check-input"
-            id="oferta"
-            name="oferta"
-          />
-          <label className="form-check-label" htmlFor="oferta">
-            Oferta
+        <div className="form-group col-md-8 mt-3">
+          <label htmlFor="ativo" className="mt-1">
+            Ativo:
           </label>
+          <select className="form-control" id="ativo" name="ativo" value="">
+            <option value="">Selecione</option>
+            <option value="Sim">Sim</option>
+            <option value="Não">Não</option>
+          </select>
         </div>
-        <div className="form-group form-check mt-3">
-          <input
-            type="checkbox"
-            className="form-check-input"
-            id="destaque"
+        <div className="form-group col-md-8 mt-3">
+          <label htmlFor="oferta" className="mt-1">
+            Oferta:
+          </label>
+          <select className="form-control" id="oferta" name="oferta" value="">
+            <option value="">Selecione</option>
+            <option value="Sim">Sim</option>
+            <option value="Não">Não</option>
+          </select>
+        </div>
+        <div className="form-group col-md-8 mt-3">
+          <label htmlFor="destaque" className="mt-1">
+            Destaque:
+          </label>
+          <select
+            className="form-control"
+            id="destque"
             name="destaque"
-          />
-          <label className="form-check-label" htmlFor="destaque">
-            Destaque
-          </label>
+            value=""
+          >
+            <option value="">Selecione</option>
+            <option value="Sim">Sim</option>
+            <option value="Não">Não</option>
+          </select>
         </div>
-        <div className="form-group form-check mt-3">
-          <input
-            type="checkbox"
-            className="form-check-input"
-            id="ativo"
-            name="ativo"
-          />
-          <label className="form-check-label" htmlFor="ativo">
-            Ativo
-          </label>
-        </div>
+
         <div className="form-group col-md-8 mt-3">
           <label htmlFor="avaliacao" className="mt-1">
             Avaliação:

@@ -40,7 +40,9 @@ const Navbar: React.FC = ({ className }: { className?: string }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response: AxiosResponse<any> = await axios.get("/api/categorias");
+        const response: AxiosResponse<any> = await axios.get(
+          "/api/obterCategorias"
+        );
         setCategorias(response.data);
       } catch (error) {
         setError(

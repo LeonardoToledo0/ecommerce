@@ -1,29 +1,86 @@
-import React from "react";
-import { ButtonModel, SectionProdutos } from "@/styles/StylesHomeAdmin";
+import React, { useState } from "react";
+import axios from "axios";
+import { SectionProdutos, ButtonModel } from "@/styles/StylesHomeAdmin";
 import { Titulos } from "@/styles/StylesNavbar-Menu";
 
-const AdicionarMarcas: React.FC = () => {
+interface AdicionarMarcasProps {}
+
+const AdicionarMarcas: React.FC<AdicionarMarcasProps> = () => {
+  const [nome, setNome] = useState<string>("");
+  const [ativo, setAtivo] = useState<string>("");
+  const [erro, setErro] = useState<string | null>(null);
+  const [sucesso, setSucesso] = useState<boolean>(false);
+
+  const SUCCESS_MESSAGE =
+    "Marcas adicionada com sucesso! Os campos foram limpos.";
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post("/api/adicionarMarcas", {
+        nome,
+        ativo,
+      });
+
+      if (response.status !== 200) {
+        throw new Error("Erro ao enviar marca");
+      }
+
+      setNome("");
+      setAtivo("");
+      setSucesso(true);
+      setErro(null);
+      window.location.reload();
+    } catch (error) {
+      console.error("Erro ao enviar marca:", error);
+      setErro("Erro ao enviar marca");
+      setSucesso(false);
+    }
+  };
+
   return (
     <SectionProdutos className="container-fluid col-md-12">
-      <Titulos className="">Adicionar Marcas</Titulos>
-      <form action="/submit" method="post">
+      <Titulos>Adicionar Marcas</Titulos>
+      <form onSubmit={handleSubmit}>
         <div className="form-group col-md-8 mt-3">
-          <label htmlFor="sku" className="mt-1">
+          <label htmlFor="nome" className="mt-1">
             Marca:
           </label>
-          <input type="text" className="form-control" id="sku" name="sku" />
-        </div>
-        <div className="form-group form-check mt-3">
           <input
-            type="checkbox"
-            className="form-check-input"
+            type="text"
+            className="form-control"
+            id="nome"
+            name="nome"
+            value={nome}
+            onChange={(e) => setNome(e.target.value)}
+          />
+        </div>
+        <div className="form-group col-md-8 mt-3">
+          <label htmlFor="ativo" className="mt-1">
+            Ativo:
+          </label>
+          <select
+            className="form-control"
             id="ativo"
             name="ativo"
-          />
-          <label className="form-check-label" htmlFor="ativo">
-            Ativo
-          </label>
+            value={ativo}
+            onChange={(e) => setAtivo(e.target.value)}
+          >
+            <option value="">Selecione</option>
+            <option value="Sim">Sim</option>
+            <option value="Não">Não</option>
+          </select>
         </div>
+        {sucesso && (
+          <div className="alert alert-success mt-3" role="alert">
+            {SUCCESS_MESSAGE}
+          </div>
+        )}
+        {erro && (
+          <div className="alert alert-danger mt-3" role="alert">
+            {erro}
+          </div>
+        )}
         <ButtonModel type="submit" className=" mt-3">
           Adicionar
         </ButtonModel>
@@ -31,4 +88,5 @@ const AdicionarMarcas: React.FC = () => {
     </SectionProdutos>
   );
 };
+
 export default AdicionarMarcas;
