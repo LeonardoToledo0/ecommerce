@@ -255,18 +255,6 @@ const AdicionarProdutos: React.FC = () => {
             <option value="Não">Não</option>
           </select>
         </div>
-
-        <div className="form-group col-md-8 mt-3">
-          <label htmlFor="avaliacao" className="mt-1">
-            Avaliação:
-          </label>
-          <input
-            type="number"
-            className="form-control"
-            id="avaliacao"
-            name="avaliacao"
-          />
-        </div>
         <div className="form-group col-md-8 mt-3">
           <label htmlFor="desconto" className="mt-1">
             Desconto:

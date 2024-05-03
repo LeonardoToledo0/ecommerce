@@ -1,12 +1,10 @@
-import { Cloudinary } from "@cloudinary/url-gen";
-const NewCloudinary = () => {
-  const cld = new Cloudinary({
-    cloud: { cloudName: process.env.CLOUDINARY_CLOUD_NAME },
-  });
+import cloudinary from "cloudinary";
 
-  console.log("Conexão estabelecida com o Cloudinary!");
+// Configuração do Cloudinary
+cloudinary.v2.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
-  return cld;
-};
-
-export default NewCloudinary;
+export default cloudinary;

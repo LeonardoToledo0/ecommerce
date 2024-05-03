@@ -7,11 +7,11 @@ import Link from "next/link";
 export const CarouselCuston = styled(Carousel)`
   border: 1px solid ${corSecundaria};
   border-radius: 8px;
-  height: 550px;
+  height: 450px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px;
+  overflow: hidden;
 `;
 
 export const ColCuston = styled(Col)`
@@ -34,8 +34,9 @@ export const ColCuston = styled(Col)`
 `;
 
 export const ImagemProduto = styled.img`
-  width: 100%;
-  height: 100%;
+  width: 90%;
+  height: 90%;
+  margin: 0 auto;
   object-fit: cover;
 `;
 

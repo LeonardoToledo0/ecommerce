@@ -3,7 +3,6 @@ import AdicionarCategoria from "./AdicionarCategoria";
 import AdicionarMarcas from "./AdicionarMarcas";
 import AdicionarProdutos from "./AdicionarProdutos";
 import AdicionarBannerPrincipal from "./AdicionarBannerPrincipal";
-import AdicionarBannerPromocao from "./AdicionarBannerPromocao";
 import AdicionarAdministrador from "./AdicionarAdministrador";
 
 const ContextAdmin = () => {
@@ -23,8 +22,6 @@ const ContextAdmin = () => {
         return <AdicionarProdutos />;
       case "AdicionarBannerPrincipal":
         return <AdicionarBannerPrincipal />;
-      case "AdicionarBannerPromocao":
-        return <AdicionarBannerPromocao />;
       case "AdicionarAdministrador":
         return <AdicionarAdministrador />;
       default:

@@ -103,25 +103,7 @@ const HomeAdmin: React.FC = () => {
                   }
                   onClick={() => handleClick("AdicionarBannerPrincipal")}
                 >
-                  Banner Principal
-                </MenuLink>
-              </li>
-            </ul>
-          </MenuContent>
-          <div className="mt-4"></div>
-          <MenuContent>
-            <ul className="nav nav-pills flex-column mb-auto">
-              <li className="nav-item">
-                <MenuLink
-                  href="#"
-                  className={
-                    selectedButton === "AdicionarBannerPromocao"
-                      ? "selecionado"
-                      : ""
-                  }
-                  onClick={() => handleClick("AdicionarBannerPromocao")}
-                >
-                  Banner Promoção
+                  Adicionar Banners
                 </MenuLink>
               </li>
             </ul>

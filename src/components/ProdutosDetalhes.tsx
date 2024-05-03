@@ -1,10 +1,6 @@
 import React from "react";
 import { Container, Row, Col, Carousel } from "react-bootstrap";
 import { BsStarFill, BsStarHalf, BsStar } from "react-icons/bs";
-import {
-  SetaDetalhesDireito,
-  SetaDetalhesEsquerda,
-} from "@/styles/StylesNavbar-Menu";
 
 import {
   ButtonContent,
@@ -131,8 +127,9 @@ const ProdutosDetalhes: React.FC = () => {
             className="m-2"
             activeIndex={miniaturas.indexOf(imagemPrincipal)}
             interval={null}
-            prevIcon={<SetaDetalhesEsquerda onClick={retrocederImagem} />}
-            nextIcon={<SetaDetalhesDireito onClick={avancarImagem} />}
+            nextIcon={null}
+            prevIcon={null}
+            indicators={false}
           >
             {miniaturas.map((miniatura, index) => (
               <Carousel.Item key={index}>

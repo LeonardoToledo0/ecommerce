@@ -180,7 +180,7 @@ export const Seta1 = styled.div`
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  margin-left: -220px;
+
   background: ${corSecundaria};
   width: 50px;
   height: 50px;
@@ -191,7 +191,7 @@ export const Seta2 = styled.div`
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  margin-left: 220px;
+
   background: ${corSecundaria};
   width: 50px;
   height: 50px;
