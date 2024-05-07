@@ -3,6 +3,8 @@ import axios from "axios";
 import { SectionProdutos, ButtonModel } from "@/styles/StylesHomeAdmin";
 import { Titulos } from "@/styles/StylesNavbar-Menu";
 
+const API_CATEGORIAS = process.env.NEXT_PUBLIC_CATEGORIAS_ADICIONAR || "";
+
 interface AdicionarCategoriaProps {}
 
 const AdicionarCategoria: React.FC<AdicionarCategoriaProps> = () => {
@@ -17,7 +19,7 @@ const AdicionarCategoria: React.FC<AdicionarCategoriaProps> = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const response = await axios.post("/api/adicionarCategorias", {
+      const response = await axios.post(API_CATEGORIAS, {
         nome,
         ativo,
       });

@@ -30,6 +30,8 @@ import {
   MenuNavBar,
 } from "@/styles/StylesNavbar-Menu";
 import { MenuItem, HoveredLink, Menu, ProductItem } from "./navbar-menu";
+import { Loader } from "./Loader";
+const API_CATEGORIAS = process.env.NEXT_PUBLIC_CATEGORIAS_BUSCAR;
 
 const Navbar: React.FC = ({ className }: { className?: string }) => {
   const [active, setActive] = useState<string | null>(null);
@@ -41,7 +43,7 @@ const Navbar: React.FC = ({ className }: { className?: string }) => {
     const fetchData = async () => {
       try {
         const response: AxiosResponse<any> = await axios.get(
-          "/api/obterCategorias"
+          API_CATEGORIAS || ""
         );
         setCategorias(response.data);
       } catch (error) {
@@ -57,7 +59,7 @@ const Navbar: React.FC = ({ className }: { className?: string }) => {
   }, []);
 
   if (loading) {
-    return <p>carregando ...</p>;
+    return <Loader />;
   }
 
   if (error) {

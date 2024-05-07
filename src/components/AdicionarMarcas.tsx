@@ -3,6 +3,8 @@ import axios from "axios";
 import { SectionProdutos, ButtonModel } from "@/styles/StylesHomeAdmin";
 import { Titulos } from "@/styles/StylesNavbar-Menu";
 
+const API_MARCAS = process.env.NEXT_PUBLIC_MARCAS_ADICIONAR || "";
+
 interface AdicionarMarcasProps {}
 
 const AdicionarMarcas: React.FC<AdicionarMarcasProps> = () => {
@@ -17,7 +19,7 @@ const AdicionarMarcas: React.FC<AdicionarMarcasProps> = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const response = await axios.post("/api/adicionarMarcas", {
+      const response = await axios.post(API_MARCAS, {
         nome,
         ativo,
       });

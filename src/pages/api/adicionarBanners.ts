@@ -1,9 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import pool from "../utils/postgres";
-import dotenv from "dotenv";
 import cloudinary from "../utils/cloudnary";
-
-dotenv.config();
 
 export default async function handler(
   req: NextApiRequest,
@@ -21,7 +18,9 @@ export default async function handler(
     }
 
     // Realiza o upload da imagem para o Cloudinary
-    const cloudinaryResponse = await cloudinary.v2.uploader.upload(imagem);
+    const cloudinaryResponse = await cloudinary.v2.uploader.upload(imagem, {
+      folder: "banners_imagems",
+    });
 
     // Insere os dados do banner no banco de dados, armazenando apenas a URL da imagem
     const insertQuery =

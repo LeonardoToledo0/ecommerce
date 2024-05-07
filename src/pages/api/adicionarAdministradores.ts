@@ -1,8 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import pool from "../utils/postgres";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 export default async function handler(
   req: NextApiRequest,
