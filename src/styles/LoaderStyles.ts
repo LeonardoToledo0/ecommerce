@@ -8,12 +8,11 @@ const spinAnimation = keyframes`
 `;
 
 export const SpinnerHome = styled.div`
-  position: relative;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 100px;
-  height: 100px;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;

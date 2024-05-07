@@ -1,4 +1,5 @@
 import React from "react";
+import { useRouter } from "next/router";
 import { Container, Row, Col, Carousel } from "react-bootstrap";
 import { BsStarFill, BsStarHalf, BsStar } from "react-icons/bs";
 
@@ -29,6 +30,7 @@ interface Product {
   image1: string;
   image2: string;
   image3: string;
+  image4: string;
   isOffer: boolean;
   star: number;
   empresa: string;
@@ -44,6 +46,7 @@ const products: Product[] = [
     image1: "../img/smartphone.webp",
     image2: "../img/shopping.webp",
     image3: "../img/shopping2.webp",
+    image4: "../img/shopping2.webp",
     isOffer: true,
     star: 2.5,
     empresa: "Plaza Eletro",
@@ -52,6 +55,9 @@ const products: Product[] = [
 ];
 
 const ProdutosDetalhes: React.FC = () => {
+  const router = useRouter();
+  const { id } = router.query;
+
   const [imagemPrincipal, setImagemPrincipal] = React.useState(
     products[0].image1
   );
@@ -59,6 +65,7 @@ const ProdutosDetalhes: React.FC = () => {
     products[0].image1,
     products[0].image2,
     products[0].image3,
+    products[0].image4,
   ];
 
   const trocarImagemPrincipal = (novaImagem: string) => {

@@ -8,7 +8,7 @@ import {
   setProduto,
   setSucesso,
 } from "@/redux/carouselOfertasSlice";
-import Link from "next/link";
+
 import { Carousel, Container, Row, Col } from "react-bootstrap";
 import {
   BsChevronLeft,
@@ -17,7 +17,12 @@ import {
   BsStarHalf,
   BsStar,
 } from "react-icons/bs";
-import { NewImage, SetaCard1, SetaCard2 } from "@/styles/StylesNavbar-Menu";
+import {
+  NewImage,
+  NewLink,
+  SetaCard1,
+  SetaCard2,
+} from "@/styles/StylesNavbar-Menu";
 import { Loader } from "./Loader";
 
 const CustomPrevArrow = ({ onClick = () => {} }: { onClick?: () => void }) => (
@@ -100,17 +105,19 @@ const CardCarrouselOfertas: React.FC = () => {
       >
         {produto.map((produto, index) => (
           <Carousel.Item key={index}>
-            <Link href={`/detalhes-produto/${produto.id}`}>
-              <Row>
-                <Col lg={3} md={6} sm={12}>
-                  <div className="card">
+            <Row>
+              <Col lg={3} md={6} sm={12}>
+                <div className="card">
+                  <NewLink href={`/produtos_detalhes?id=${produto.id}`}>
                     <NewImage
                       src={produto.imagem_principal}
                       className="card-img-top"
                       alt={produto.nome}
                     />
+
                     <div className="card-body">
                       <h5 className="card-title">{produto.nome}</h5>
+
                       <div className="d-flex align-items-center">
                         <span className="me-2 mt-1">
                           Avaliação: ({produto.avaliacao})
@@ -135,10 +142,10 @@ const CardCarrouselOfertas: React.FC = () => {
                         </p>
                       </div>
                     </div>
-                  </div>
-                </Col>
-              </Row>
-            </Link>
+                  </NewLink>
+                </div>
+              </Col>
+            </Row>
           </Carousel.Item>
         ))}
       </Carousel>

@@ -244,7 +244,10 @@ export const SetaDetalhesDireito = styled(BsChevronRight)`
   height: 40px;
   font-size: 1.8rem;
 `;
-
+export const NewLink = styled(Link)`
+  text-decoration: none;
+  color: ${corSecundaria};
+`;
 //  Titulos
 
 export const Titulos = styled.h2`
