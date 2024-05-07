@@ -22,8 +22,7 @@ const AdicionarCategoria: React.FC<AdicionarCategoriaProps> = () => {
     (state: RootState) => state.categoria
   );
 
-  const SUCCESS_MESSAGE =
-    "Categoria adicionada com sucesso! Os campos foram limpos.";
+  const SUCCESS_MESSAGE = "Categoria adicionada com sucesso! ";
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -38,8 +37,6 @@ const AdicionarCategoria: React.FC<AdicionarCategoriaProps> = () => {
       }
 
       dispatch(resetCategoriaState());
-      dispatch(setSucesso(true));
-      dispatch(setErro(null));
       window.location.reload();
     } catch (error) {
       console.error("Erro ao enviar categoria:", error);

@@ -1,8 +1,8 @@
 import React from "react";
-import { CardCarrouselOfertas } from "./CardCarrouselOfertas";
 import { Titulos, Container } from "@/styles/StylesNavbar-Menu";
+import CardCarrouselOfertas from "./CardCarrouselOfertas";
 
-export const OfertasCarrousel: React.FC = () => {
+const OfertasCarrousel: React.FC = () => {
   return (
     <>
       <Container className="container bg-light mt-5 ">
@@ -13,3 +13,5 @@ export const OfertasCarrousel: React.FC = () => {
     </>
   );
 };
+
+export default OfertasCarrousel;

@@ -1,12 +1,14 @@
+import React from "react";
 import Carrousel from "@/components/Carrousel";
 import Navbar from "@/components/NavBar";
-import React from "react";
+import OfertasCarrousel from "@/components/OfertasCarrousel";
 
 const Index: React.FC = () => {
   return (
     <>
       <Navbar />
       <Carrousel />
+      <OfertasCarrousel />
     </>
   );
 };

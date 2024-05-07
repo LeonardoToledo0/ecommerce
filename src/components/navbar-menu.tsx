@@ -7,7 +7,7 @@ import {
   MotionDiv,
   MenuNav,
   MenuLink,
-  Image,
+  NewImage,
 } from "@/styles/StylesNavbar-Menu";
 
 const transition = {
@@ -73,7 +73,7 @@ export const ProductItem = ({
 }) => {
   return (
     <MenuLink href={href}>
-      <Image
+      <NewImage
         src={src}
         width={140}
         height={70}

@@ -5,10 +5,11 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/configureStore";
 import {
-  setNome as setNomeAction,
-  setAtivo as setAtivoAction,
-  setSucesso as setSucessoAction,
-  setErro as setErroAction,
+  setNome,
+  setAtivo,
+  setSucesso,
+  setErro,
+  resetMarcaState,
 } from "../redux/marcaSlice";
 import { SectionProdutos, ButtonModel } from "@/styles/StylesHomeAdmin";
 import { Titulos } from "@/styles/StylesNavbar-Menu";
@@ -17,13 +18,12 @@ const API_MARCAS = process.env.NEXT_PUBLIC_MARCAS_ADICIONAR || "";
 interface AdicionarMarcasProps {}
 
 const AdicionarMarcas: React.FC<AdicionarMarcasProps> = () => {
-  const [erro, setErro] = useState<string | null>(null);
-  const [sucesso, setSucesso] = useState<boolean>(false);
-  const { nome, ativo } = useSelector((state: RootState) => state.marca);
+  const { nome, ativo, sucesso, erro } = useSelector(
+    (state: RootState) => state.marca
+  );
   const dispatch = useDispatch();
 
-  const SUCCESS_MESSAGE =
-    "Marca adicionada com sucesso! Os campos foram limpos.";
+  const SUCCESS_MESSAGE = "Marca adicionada com sucesso! ";
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -37,15 +37,12 @@ const AdicionarMarcas: React.FC<AdicionarMarcasProps> = () => {
         throw new Error("Erro ao enviar marca");
       }
 
-      dispatch(setNomeAction(""));
-      dispatch(setAtivoAction(""));
-      dispatch(setSucessoAction(true));
-      dispatch(setErroAction(null));
+      dispatch(resetMarcaState());
       window.location.reload();
     } catch (error) {
       console.error("Erro ao enviar marca:", error);
-      dispatch(setErroAction("Erro ao enviar marca"));
-      dispatch(setSucessoAction(false));
+      dispatch(setErro("Erro ao enviar marca"));
+      dispatch(setSucesso(false));
     }
   };
 
@@ -63,7 +60,7 @@ const AdicionarMarcas: React.FC<AdicionarMarcasProps> = () => {
             id="nome"
             name="nome"
             value={nome}
-            onChange={(e) => dispatch(setNomeAction(e.target.value))}
+            onChange={(e) => dispatch(setNome(e.target.value))}
           />
         </div>
         <div className="form-group col-md-8 mt-3">
@@ -75,7 +72,7 @@ const AdicionarMarcas: React.FC<AdicionarMarcasProps> = () => {
             id="ativo"
             name="ativo"
             value={ativo}
-            onChange={(e) => dispatch(setAtivoAction(e.target.value))}
+            onChange={(e) => dispatch(setAtivo(e.target.value))}
           >
             <option value="">Selecione</option>
             <option value="Sim">Sim</option>

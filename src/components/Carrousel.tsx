@@ -1,6 +1,6 @@
 import React from "react";
 import Carousel from "react-bootstrap/Carousel";
-import { Image, Seta1, Seta2 } from "@/styles/StylesNavbar-Menu";
+import { NewImage, Seta1, Seta2 } from "@/styles/StylesNavbar-Menu";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 
 const banners = [
@@ -37,7 +37,7 @@ const Carrousel: React.FC = () => {
     >
       {banners.map((banner) => (
         <Carousel.Item key={banner.id}>
-          <Image
+          <NewImage
             src={banner.url}
             className="d-block container"
             alt={`Banner ${banner.id}`}

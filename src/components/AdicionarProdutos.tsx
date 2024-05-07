@@ -8,7 +8,7 @@ import {
   setErro,
   setCategorias,
   setMarcas,
-  setSku as setSkuAction,
+  setSku,
   setMarcasId,
   setCategoriasId,
   setValorAntigo,
@@ -24,6 +24,7 @@ import {
   setImagemMiniatura3,
   setAtivo,
   setStatus,
+  resetProdutosState,
 } from "../redux/produtoSlice";
 import { ButtonModel, SectionProdutos } from "@/styles/StylesHomeAdmin";
 import { Titulos } from "@/styles/StylesNavbar-Menu";
@@ -59,8 +60,7 @@ const AdicionarProdutos: React.FC<AdicionarProdutosProps> = () => {
     ativo,
     status,
   } = useSelector((state: RootState) => state.produto);
-  const SUCCESS_MESSAGE =
-    "Produto adicionado com sucesso! Os campos foram limpos.";
+  const SUCCESS_MESSAGE = "Produto adicionado com sucesso! ";
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -98,23 +98,7 @@ const AdicionarProdutos: React.FC<AdicionarProdutosProps> = () => {
         throw new Error("Erro ao adicionar Produtos");
       }
 
-      dispatch(setSkuAction(""));
-      dispatch(setNome(""));
-      dispatch(setMarcasId(0));
-      dispatch(setCategoriasId(0));
-      dispatch(setValor(0));
-      dispatch(setValorAntigo(0));
-      dispatch(setEstoque(0));
-      dispatch(setDesconto(0));
-      dispatch(setModelo(""));
-      dispatch(setDescricao(""));
-      dispatch(setImagemPrincipal(null));
-      dispatch(setImagemMiniatura1(null));
-      dispatch(setImagemMiniatura2(null));
-      dispatch(setImagemMiniatura3(null));
-      dispatch(setAtivo(""));
-      dispatch(setStatus(""));
-      dispatch(setSucesso(true));
+      dispatch(resetProdutosState());
       window.location.reload();
     } catch (error) {
       console.error("Erro ao enviar o Produto:", error);
@@ -175,7 +159,7 @@ const AdicionarProdutos: React.FC<AdicionarProdutosProps> = () => {
             id="sku"
             name="sku"
             value={sku}
-            onChange={(e) => dispatch(setSkuAction(e.target.value))}
+            onChange={(e) => dispatch(setSku(e.target.value))}
           />
         </div>
         <div className="form-group col-md-8 mt-3">

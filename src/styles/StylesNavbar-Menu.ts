@@ -171,7 +171,9 @@ export const MenuNavBarCard = styled.div`
   grid-auto-flow: column;
   grid-template-rows: repeat(1, 1fr);
 `;
-export const Image = styled.img``;
+export const NewImage = styled.img`
+  width: 100%;
+`;
 
 // Banner Carrousel
 

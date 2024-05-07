@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { stat } from "fs";
 
 interface ProdutoState {
   loading: boolean;
@@ -115,6 +116,26 @@ const produtoSlice = createSlice({
     setStatus: (state, action: PayloadAction<string>) => {
       state.status = action.payload;
     },
+    resetProdutosState(state) {
+      state.sku = "";
+      state.nome = "";
+      state.marcas_id = 0;
+      state.categorias_id = 0;
+      state.valor = 0;
+      state.valor_antigo = 0;
+      state.estoque = 0;
+      state.desconto = 0;
+      state.modelo = "";
+      state.descricao = "";
+      state.imagem_principal = null;
+      state.imagem_miniatura_1 = null;
+      state.imagem_miniatura_2 = null;
+      state.imagem_miniatura_3 = null;
+      state.ativo = "";
+      state.status = "";
+      state.sucesso = false;
+      state.loading = true;
+    },
   },
 });
 
@@ -140,6 +161,7 @@ export const {
   setImagemMiniatura3,
   setAtivo,
   setStatus,
+  resetProdutosState,
 } = produtoSlice.actions;
 
 export default produtoSlice.reducer;

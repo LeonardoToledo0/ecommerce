@@ -1,4 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../redux/configureStore";
+import {
+  setLoading,
+  setErro,
+  setProduto,
+  setSucesso,
+} from "@/redux/carouselOfertasSlice";
 import Link from "next/link";
 import { Carousel, Container, Row, Col } from "react-bootstrap";
 import {
@@ -8,7 +17,7 @@ import {
   BsStarHalf,
   BsStar,
 } from "react-icons/bs";
-import { SetaCard1, SetaCard2 } from "@/styles/StylesNavbar-Menu";
+import { NewImage, SetaCard1, SetaCard2 } from "@/styles/StylesNavbar-Menu";
 import { Loader } from "./Loader";
 
 const CustomPrevArrow = ({ onClick = () => {} }: { onClick?: () => void }) => (
@@ -23,10 +32,32 @@ const CustomNextArrow = ({ onClick = () => {} }: { onClick?: () => void }) => (
   </SetaCard1>
 );
 
-export const CardCarrouselOfertas: React.FC = () => {
-  const [products, setProducts] = useState<any[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>("");
+const API_PRODUTOS = process.env.NEXT_PUBLIC_PRODUTOS_OFERTAS || "";
+
+const CardCarrouselOfertas: React.FC = () => {
+  const dispatch = useDispatch();
+  const { produto, loading, erro, sucesso } = useSelector(
+    (state: RootState) => state.carouselOfertas
+  );
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(API_PRODUTOS);
+        dispatch(setProduto(response.data));
+      } catch (error) {
+        dispatch(
+          setErro(
+            "Erro ao buscar produtos. Verifique sua conexão de internet e tente novamente."
+          )
+        );
+      } finally {
+        dispatch(setLoading(false));
+      }
+    };
+
+    fetchData();
+  }, [dispatch]);
 
   const renderStars = (star: number) => {
     const fullStars = Math.floor(star);
@@ -55,8 +86,8 @@ export const CardCarrouselOfertas: React.FC = () => {
     return <Loader />;
   }
 
-  if (error) {
-    return <p>{error}</p>;
+  if (erro) {
+    return <p>{erro}</p>;
   }
 
   return (
@@ -67,42 +98,39 @@ export const CardCarrouselOfertas: React.FC = () => {
         prevIcon={<CustomPrevArrow />}
         nextIcon={<CustomNextArrow />}
       >
-        {products.map((product, index) => (
+        {produto.map((produto, index) => (
           <Carousel.Item key={index}>
-            <Link href={`/detalhes-produto/${product.id}`}>
-              {" "}
-              {/* Link dinâmico para detalhes do produto */}
+            <Link href={`/detalhes-produto/${produto.id}`}>
               <Row>
                 <Col lg={3} md={6} sm={12}>
                   <div className="card">
-                    <img
-                      src={product.imagem_principal}
+                    <NewImage
+                      src={produto.imagem_principal}
                       className="card-img-top"
-                      alt="Imagem do Produto"
+                      alt={produto.nome}
                     />
                     <div className="card-body">
-                      <h5 className="card-title">{product.nome}</h5>
+                      <h5 className="card-title">{produto.nome}</h5>
                       <div className="d-flex align-items-center">
                         <span className="me-2 mt-1">
-                          Avaliação: ({product.avaliacao})
+                          Avaliação: ({produto.avaliacao})
                         </span>
                         <div className="rating">
-                          {renderStars(product.avaliacao)}
+                          {renderStars(produto.avaliacao)}
                         </div>
                       </div>
                       <div className="d-flex justify-content-between align-items-center mt-3">
                         <span className="text-muted text-decoration-line-through">
-                          R$ {Number(product.valor_antigo).toFixed(2)}
+                          R$ {Number(produto.valor_antigo).toFixed(2)}
                         </span>
-
                         <span className="h5">
-                          R$ {Number(product.valor).toFixed(2)}
+                          R$ {Number(produto.valor).toFixed(2)}
                         </span>
                         <p>
                           no Pix{" "}
                           <span className="text-success">
-                            (<b>{product.desconto_percentual.slice(0, -3)}</b>%
-                            de desconto)
+                            (<b>{produto.desconto.slice(0, -3)}</b>% de
+                            desconto)
                           </span>
                         </p>
                       </div>
@@ -117,3 +145,4 @@ export const CardCarrouselOfertas: React.FC = () => {
     </Container>
   );
 };
+export default CardCarrouselOfertas;

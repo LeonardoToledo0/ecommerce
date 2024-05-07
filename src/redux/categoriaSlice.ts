@@ -33,7 +33,7 @@ const categoriaSlice = createSlice({
     resetCategoriaState(state) {
       state.nome = "";
       state.ativo = "";
-      state.sucesso = false;
+      state.sucesso = true;
       state.erro = null;
     },
   },
