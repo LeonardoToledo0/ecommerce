@@ -1,5 +1,30 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../redux/configureStore";
+import {
+  setLoading,
+  setSucesso,
+  setErro,
+  setCategorias,
+  setMarcas,
+  setSku as setSkuAction,
+  setMarcasId,
+  setCategoriasId,
+  setValorAntigo,
+  setEstoque,
+  setValor,
+  setDesconto,
+  setModelo,
+  setNome,
+  setDescricao,
+  setImagemPrincipal,
+  setImagemMiniatura1,
+  setImagemMiniatura2,
+  setImagemMiniatura3,
+  setAtivo,
+  setStatus,
+} from "../redux/produtoSlice";
 import { ButtonModel, SectionProdutos } from "@/styles/StylesHomeAdmin";
 import { Titulos } from "@/styles/StylesNavbar-Menu";
 
@@ -10,57 +35,36 @@ const API_MARCAS = process.env.NEXT_PUBLIC_MARCAS_BUSCAR || "";
 const API_PRODUTOS = process.env.NEXT_PUBLIC_PRODUTOS_ADICIONAR || "";
 
 const AdicionarProdutos: React.FC<AdicionarProdutosProps> = () => {
-  const [loading, setLoading] = useState<boolean>(true);
-  const [sucesso, setSucesso] = useState<boolean>(false);
-  const [erro, setErro] = useState<string | null>(null);
-  const [categorias, setCategorias] = useState<any[]>([]);
-  const [marcas, setMarcas] = useState<any[]>([]);
-  const [sku, setSku] = useState<string>("");
-  const [marcas_id, setMarcas_id] = useState<number>(0);
-  const [categorias_id, setCategorias_id] = useState<number>(0);
-  const [valor_antigo, setValor_antigo] = useState<number>(0);
-  const [estoque, setEstoque] = useState<number>(0);
-  const [valor, setValor] = useState<number>(0);
-  const [desconto, setDesconto] = useState<number>(0);
-  const [modelo, setModelo] = useState<string>("");
-  const [nome, setNome] = useState<string>("");
-  const [descricao, setDescricao] = useState<string>("");
-  const [imagem_principal, setImagem_principal] = useState<File | null>(null);
-  const [imagem_miniatura_1, setImagem_miniatura_1] = useState<File | null>(
-    null
-  );
-  const [imagem_miniatura_2, setImagem_miniatura_2] = useState<File | null>(
-    null
-  );
-  const [imagem_miniatura_3, setImagem_miniatura_3] = useState<File | null>(
-    null
-  );
-  const [ativo, setAtivo] = useState<string>("");
-  const [status, setStatus] = useState<string>("");
+  const dispatch = useDispatch();
+  const {
+    loading,
+    sucesso,
+    erro,
+    categorias,
+    marcas,
+    sku,
+    marcas_id,
+    categorias_id,
+    valor_antigo,
+    estoque,
+    valor,
+    desconto,
+    modelo,
+    nome,
+    descricao,
+    imagem_principal,
+    imagem_miniatura_1,
+    imagem_miniatura_2,
+    imagem_miniatura_3,
+    ativo,
+    status,
+  } = useSelector((state: RootState) => state.produto);
   const SUCCESS_MESSAGE =
     "Produto adicionado com sucesso! Os campos foram limpos.";
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      console.log("Dados do produto a serem enviados:", {
-        sku,
-        nome,
-        marcas_id,
-        categorias_id,
-        valor_antigo,
-        valor,
-        estoque,
-        desconto,
-        modelo,
-        descricao,
-        imagem_principal,
-        imagem_miniatura_1,
-        imagem_miniatura_2,
-        imagem_miniatura_3,
-        ativo,
-        status,
-      });
       const formData = new FormData();
       formData.append("sku", sku);
       formData.append("nome", nome);
@@ -94,27 +98,28 @@ const AdicionarProdutos: React.FC<AdicionarProdutosProps> = () => {
         throw new Error("Erro ao adicionar Produtos");
       }
 
-      setSku("");
-      setNome("");
-      setMarcas_id(0);
-      setCategorias_id(0);
-      setValor(0);
-      setValor_antigo(0);
-      setEstoque(0);
-      setDesconto(0);
-      setModelo("");
-      setDescricao("");
-      setImagem_principal(null);
-      setImagem_miniatura_1(null);
-      setImagem_miniatura_2(null);
-      setImagem_miniatura_3(null);
-      setAtivo("");
-      setStatus("");
+      dispatch(setSkuAction(""));
+      dispatch(setNome(""));
+      dispatch(setMarcasId(0));
+      dispatch(setCategoriasId(0));
+      dispatch(setValor(0));
+      dispatch(setValorAntigo(0));
+      dispatch(setEstoque(0));
+      dispatch(setDesconto(0));
+      dispatch(setModelo(""));
+      dispatch(setDescricao(""));
+      dispatch(setImagemPrincipal(null));
+      dispatch(setImagemMiniatura1(null));
+      dispatch(setImagemMiniatura2(null));
+      dispatch(setImagemMiniatura3(null));
+      dispatch(setAtivo(""));
+      dispatch(setStatus(""));
+      dispatch(setSucesso(true));
       window.location.reload();
     } catch (error) {
       console.error("Erro ao enviar o Produto:", error);
-      setErro("Erro ao enviar o Produto");
-      setSucesso(false);
+      dispatch(setErro("Erro ao enviar o Produto"));
+      dispatch(setSucesso(false));
     }
   };
 
@@ -122,35 +127,39 @@ const AdicionarProdutos: React.FC<AdicionarProdutosProps> = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(API_CATEGORIAS);
-        setCategorias(response.data);
+        dispatch(setCategorias(response.data));
       } catch (error) {
-        setErro(
-          "Erro ao buscar categorias. Verifique sua conexão de internet e tente novamente."
+        dispatch(
+          setErro(
+            "Erro ao buscar categorias. Verifique sua conexão de internet e tente novamente."
+          )
         );
       } finally {
-        setLoading(false);
+        dispatch(setLoading(false));
       }
     };
 
     fetchData();
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(API_MARCAS);
-        setMarcas(response.data);
+        dispatch(setMarcas(response.data));
       } catch (error) {
-        setErro(
-          "Erro ao buscar marcas. Verifique sua conexão de internet e tente novamente."
+        dispatch(
+          setErro(
+            "Erro ao buscar marcas. Verifique sua conexão de internet e tente novamente."
+          )
         );
       } finally {
-        setLoading(false);
+        dispatch(setLoading(false));
       }
     };
 
     fetchData();
-  }, []);
+  }, [dispatch]);
 
   return (
     <SectionProdutos className="container-fluid col-md-12">
@@ -166,7 +175,7 @@ const AdicionarProdutos: React.FC<AdicionarProdutosProps> = () => {
             id="sku"
             name="sku"
             value={sku}
-            onChange={(e) => setSku(e.target.value)}
+            onChange={(e) => dispatch(setSkuAction(e.target.value))}
           />
         </div>
         <div className="form-group col-md-8 mt-3">
@@ -178,7 +187,7 @@ const AdicionarProdutos: React.FC<AdicionarProdutosProps> = () => {
             id="marca_id"
             name="marca_id"
             value={marcas_id}
-            onChange={(e) => setMarcas_id(Number(e.target.value))}
+            onChange={(e) => dispatch(setMarcasId(Number(e.target.value)))}
           >
             <option value="">Selecione a marca</option>
             {marcas.map((marca) => (
@@ -197,7 +206,7 @@ const AdicionarProdutos: React.FC<AdicionarProdutosProps> = () => {
             id="categoria_id"
             name="categoria_id"
             value={categorias_id}
-            onChange={(e) => setCategorias_id(Number(e.target.value))}
+            onChange={(e) => dispatch(setCategoriasId(Number(e.target.value)))}
           >
             <option value="">Selecione a Categoria</option>
 
@@ -218,7 +227,7 @@ const AdicionarProdutos: React.FC<AdicionarProdutosProps> = () => {
             id="modelo"
             name="modelo"
             value={modelo}
-            onChange={(e) => setModelo(e.target.value)}
+            onChange={(e) => dispatch(setModelo(e.target.value))}
           />
         </div>
         <div className="form-group col-md-8 mt-3">
@@ -231,7 +240,7 @@ const AdicionarProdutos: React.FC<AdicionarProdutosProps> = () => {
             id="nome"
             name="nome"
             value={nome}
-            onChange={(e) => setNome(e.target.value)}
+            onChange={(e) => dispatch(setNome(e.target.value))}
           />
         </div>
         <div className="form-group col-md-8 mt-3">
@@ -245,7 +254,7 @@ const AdicionarProdutos: React.FC<AdicionarProdutosProps> = () => {
             rows={7}
             style={{ resize: "none" }}
             value={descricao}
-            onChange={(e) => setDescricao(e.target.value)}
+            onChange={(e) => dispatch(setDescricao(e.target.value))}
           />
         </div>
         <div className="form-group col-md-8 mt-3">
@@ -258,7 +267,7 @@ const AdicionarProdutos: React.FC<AdicionarProdutosProps> = () => {
             id="valor"
             name="valor"
             value={valor}
-            onChange={(e) => setValor(Number(e.target.value))}
+            onChange={(e) => dispatch(setValor(Number(e.target.value)))}
           />
         </div>
         <div className="form-group col-md-8 mt-3">
@@ -271,7 +280,7 @@ const AdicionarProdutos: React.FC<AdicionarProdutosProps> = () => {
             id="valor_antigo"
             name="valor_antigo"
             value={valor_antigo}
-            onChange={(e) => setValor_antigo(Number(e.target.value))}
+            onChange={(e) => dispatch(setValorAntigo(Number(e.target.value)))}
           />
         </div>
         <div className="form-group col-md-8 mt-3">
@@ -284,7 +293,7 @@ const AdicionarProdutos: React.FC<AdicionarProdutosProps> = () => {
             id="estoque"
             name="estoque"
             value={estoque}
-            onChange={(e) => setEstoque(Number(e.target.value))}
+            onChange={(e) => dispatch(setEstoque(Number(e.target.value)))}
           />
         </div>
         <div className="form-group col-md-8 mt-3">
@@ -297,7 +306,9 @@ const AdicionarProdutos: React.FC<AdicionarProdutosProps> = () => {
             id="imagem_principal"
             name="imagem_principal"
             onChange={(e) =>
-              setImagem_principal(e.target.files ? e.target.files[0] : null)
+              dispatch(
+                setImagemPrincipal(e.target.files ? e.target.files[0] : null)
+              )
             }
           />
         </div>
@@ -311,7 +322,9 @@ const AdicionarProdutos: React.FC<AdicionarProdutosProps> = () => {
             id="imagem_miniatura_1"
             name="imagem_miniatura_1"
             onChange={(e) =>
-              setImagem_miniatura_1(e.target.files ? e.target.files[0] : null)
+              dispatch(
+                setImagemMiniatura1(e.target.files ? e.target.files[0] : null)
+              )
             }
           />
         </div>
@@ -325,7 +338,9 @@ const AdicionarProdutos: React.FC<AdicionarProdutosProps> = () => {
             id="imagem_miniatura_2"
             name="imagem_miniatura_2"
             onChange={(e) =>
-              setImagem_miniatura_2(e.target.files ? e.target.files[0] : null)
+              dispatch(
+                setImagemMiniatura2(e.target.files ? e.target.files[0] : null)
+              )
             }
           />
         </div>
@@ -339,7 +354,9 @@ const AdicionarProdutos: React.FC<AdicionarProdutosProps> = () => {
             id="imagem_miniatura_3"
             name="imagem_miniatura_3"
             onChange={(e) =>
-              setImagem_miniatura_3(e.target.files ? e.target.files[0] : null)
+              dispatch(
+                setImagemMiniatura3(e.target.files ? e.target.files[0] : null)
+              )
             }
           />
         </div>
@@ -352,7 +369,7 @@ const AdicionarProdutos: React.FC<AdicionarProdutosProps> = () => {
             id="ativo"
             name="ativo"
             value={ativo}
-            onChange={(e) => setAtivo(e.target.value)}
+            onChange={(e) => dispatch(setAtivo(e.target.value))}
           >
             <option value="">Selecione</option>
             <option value="Sim">Sim</option>
@@ -368,7 +385,7 @@ const AdicionarProdutos: React.FC<AdicionarProdutosProps> = () => {
             id="status"
             name="status"
             value={status}
-            onChange={(e) => setStatus(e.target.value)}
+            onChange={(e) => dispatch(setStatus(e.target.value))}
           >
             <option value="">Selecione</option>
             <option value="Oferta">Oferta</option>
@@ -385,7 +402,7 @@ const AdicionarProdutos: React.FC<AdicionarProdutosProps> = () => {
             id="desconto"
             name="desconto"
             value={desconto}
-            onChange={(e) => setDesconto(Number(e.target.value))}
+            onChange={(e) => dispatch(setDesconto(Number(e.target.value)))}
           />
         </div>
         {sucesso && (

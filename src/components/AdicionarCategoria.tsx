@@ -2,16 +2,25 @@ import React, { useState } from "react";
 import axios from "axios";
 import { SectionProdutos, ButtonModel } from "@/styles/StylesHomeAdmin";
 import { Titulos } from "@/styles/StylesNavbar-Menu";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setNome,
+  setAtivo,
+  setSucesso,
+  setErro,
+  resetCategoriaState,
+} from "../redux/categoriaSlice";
+import { RootState } from "../redux/configureStore";
 
 const API_CATEGORIAS = process.env.NEXT_PUBLIC_CATEGORIAS_ADICIONAR || "";
 
 interface AdicionarCategoriaProps {}
 
 const AdicionarCategoria: React.FC<AdicionarCategoriaProps> = () => {
-  const [nome, setNome] = useState<string>("");
-  const [ativo, setAtivo] = useState<string>("");
-  const [erro, setErro] = useState<string | null>(null);
-  const [sucesso, setSucesso] = useState<boolean>(false);
+  const dispatch = useDispatch();
+  const { nome, ativo, sucesso, erro } = useSelector(
+    (state: RootState) => state.categoria
+  );
 
   const SUCCESS_MESSAGE =
     "Categoria adicionada com sucesso! Os campos foram limpos.";
@@ -28,15 +37,14 @@ const AdicionarCategoria: React.FC<AdicionarCategoriaProps> = () => {
         throw new Error("Erro ao enviar categoria");
       }
 
-      setNome("");
-      setAtivo("");
-      setSucesso(true);
-      setErro(null);
+      dispatch(resetCategoriaState());
+      dispatch(setSucesso(true));
+      dispatch(setErro(null));
       window.location.reload();
     } catch (error) {
       console.error("Erro ao enviar categoria:", error);
-      setErro("Erro ao enviar categoria");
-      setSucesso(false);
+      dispatch(setErro("Erro ao enviar categoria"));
+      dispatch(setSucesso(false));
     }
   };
 
@@ -54,7 +62,7 @@ const AdicionarCategoria: React.FC<AdicionarCategoriaProps> = () => {
             id="nome"
             name="nome"
             value={nome}
-            onChange={(e) => setNome(e.target.value)}
+            onChange={(e) => dispatch(setNome(e.target.value))}
           />
         </div>
         <div className="form-group col-md-8 mt-3">
@@ -66,7 +74,7 @@ const AdicionarCategoria: React.FC<AdicionarCategoriaProps> = () => {
             id="ativo"
             name="ativo"
             value={ativo}
-            onChange={(e) => setAtivo(e.target.value)}
+            onChange={(e) => dispatch(setAtivo(e.target.value))}
           >
             <option value="">Selecione</option>
             <option value="Sim">Sim</option>

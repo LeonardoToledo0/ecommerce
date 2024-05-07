@@ -1,8 +1,7 @@
 // pages/_app.tsx
 import React from "react";
-import dotenv from "dotenv";
-dotenv.config();
-
+import { Provider } from "react-redux";
+import { store } from "../redux/configureStore";
 import { AppProps } from "next/app";
 import { GlobalStyles } from "../styles/GlobalStyles";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -10,9 +9,10 @@ import "bootstrap/dist/css/bootstrap.min.css";
 function App({ Component, pageProps }: AppProps) {
   return (
     <>
-      <GlobalStyles />
-
-      <Component {...pageProps} />
+      <Provider store={store}>
+        <GlobalStyles />
+        <Component {...pageProps} />
+      </Provider>
     </>
   );
 }
