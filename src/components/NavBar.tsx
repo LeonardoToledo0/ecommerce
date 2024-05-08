@@ -30,7 +30,7 @@ import {
   MenuNavBar,
 } from "@/styles/StylesNavbar-Menu";
 import { MenuItem, HoveredLink, Menu, ProductItem } from "./navbar-menu";
-import { Loader } from "./Loader";
+import Loader from "./Loader";
 const API_CATEGORIAS = process.env.NEXT_PUBLIC_CATEGORIAS_BUSCAR;
 
 const Navbar: React.FC = ({ className }: { className?: string }) => {

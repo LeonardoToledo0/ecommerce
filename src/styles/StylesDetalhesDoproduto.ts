@@ -12,15 +12,20 @@ export const CarouselCuston = styled(Carousel)`
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  text-align: center;
+  background: #ffff;
+  padding: 3%;
 `;
 
 export const ColCuston = styled(Col)`
   object-fit: cover;
   display: flex;
+  text-align: center;
   align-items: center;
   justify-content: center;
   height: 100px;
-  padding: 10px;
+  padding: 3%;
+  background: #ffff;
   border: 1px solid ${corSecundaria};
   border-radius: 8px;
   transition: all 0.5s ease-in-out;
@@ -34,8 +39,7 @@ export const ColCuston = styled(Col)`
 `;
 
 export const ImagemProduto = styled.img`
-  width: 90%;
-  height: 90%;
+  width: 100%;
   margin: 0 auto;
   object-fit: cover;
 `;

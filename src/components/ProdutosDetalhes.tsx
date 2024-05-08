@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
+import axios from "axios";
 import { useRouter } from "next/router";
 import { Container, Row, Col, Carousel } from "react-bootstrap";
 import { BsStarFill, BsStarHalf, BsStar } from "react-icons/bs";
-
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../redux/configureStore";
+import Loader from "./Loader";
 import {
   ButtonContent,
-  ButtonLink,
   CarouselCuston,
+  ButtonLink,
   ColCuston,
   ColCuston2,
   ImagemProduto,
@@ -21,89 +24,80 @@ import {
   ParagrafoB,
   Pix,
 } from "../styles/StylesDetalhesDoproduto";
+import {
+  setLoading,
+  setProduto,
+  setSucesso,
+  setErro,
+  setImagemPrincipal,
+} from "@/redux/produtoDetalhesSlice";
 
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-  oldPrice?: number;
-  image1: string;
-  image2: string;
-  image3: string;
-  image4: string;
-  isOffer: boolean;
-  star: number;
-  empresa: string;
-  desconto: string;
-}
-
-const products: Product[] = [
-  {
-    id: 1,
-    name: "Smartphone",
-    price: 49.99,
-    oldPrice: 99.99,
-    image1: "../img/smartphone.webp",
-    image2: "../img/shopping.webp",
-    image3: "../img/shopping2.webp",
-    image4: "../img/shopping2.webp",
-    isOffer: true,
-    star: 2.5,
-    empresa: "Plaza Eletro",
-    desconto: "(5% de desconto)",
-  },
-];
+const API_PRODUTOS = process.env.NEXT_PUBLIC_PRODUTOS_ID || "";
 
 const ProdutosDetalhes: React.FC = () => {
   const router = useRouter();
   const { id } = router.query;
+  const dispatch = useDispatch();
+  const {
+    produto,
+    erro,
+    imagem_principal,
+    imagem_miniatura_1,
+    imagem_miniatura_2,
+    imagem_miniatura_3,
+    loading,
+  } = useSelector((state: RootState) => state.produtoDetalhes);
 
-  const [imagemPrincipal, setImagemPrincipal] = React.useState(
-    products[0].image1
-  );
-  const miniaturas = [
-    products[0].image1,
-    products[0].image2,
-    products[0].image3,
-    products[0].image4,
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!id) return;
 
-  const trocarImagemPrincipal = (novaImagem: string) => {
-    setImagemPrincipal(novaImagem);
+      dispatch(setLoading(true));
+      try {
+        const response = await axios.get(`${API_PRODUTOS}/${id}`);
+
+        dispatch(setProduto(response.data));
+        dispatch(setImagemPrincipal(response.data.imagem_principal));
+      } catch (error) {
+        dispatch(
+          setErro(
+            "Erro ao buscar produtos. Verifique sua conexão de internet e tente novamente."
+          )
+        );
+      } finally {
+        dispatch(setLoading(false));
+      }
+    };
+
+    fetchData();
+  }, [id, dispatch]);
+
+  const trocarImagemPrincipal = (imagem: string) => {
+    dispatch(setImagemPrincipal(imagem));
   };
 
-  const avancarImagem = () => {
-    const indiceAtual = miniaturas.indexOf(imagemPrincipal);
-    const proximoIndice = (indiceAtual + 1) % miniaturas.length;
-    setImagemPrincipal(miniaturas[proximoIndice]);
-  };
-
-  const retrocederImagem = () => {
-    const indiceAtual = miniaturas.indexOf(imagemPrincipal);
-    const indiceAnterior =
-      (indiceAtual - 1 + miniaturas.length) % miniaturas.length;
-    setImagemPrincipal(miniaturas[indiceAnterior]);
-  };
+  const imagensFiltradas = [
+    produto?.imagem_principal,
+    produto?.imagem_miniatura_1,
+    produto?.imagem_miniatura_2,
+    produto?.imagem_miniatura_3,
+  ].filter((imagem) => imagem !== undefined) as string[];
 
   const renderStars = (star: number) => {
-    const fullStars = Math.floor(star); // Número inteiro de estrelas cheias
-    const hasHalfStar = star % 1 >= 0.5; // Verifica se há uma meia estrela
+    const fullStars = Math.floor(star);
+    const hasHalfStar = star % 1 >= 0.5;
     const starArray = [];
 
-    // Adiciona estrelas cheias ao array
     for (let i = 0; i < fullStars; i++) {
       starArray.push(<BsStarFill key={i} className="text-warning" />);
     }
 
-    // Adiciona uma meia estrela, se necessário
     if (hasHalfStar) {
       starArray.push(<BsStarHalf key="half" className="text-warning" />);
     } else if (fullStars < 4) {
-      // Adiciona uma estrela vazia, se o total for menor que 4
       starArray.push(<BsStar key="empty" className="text-warning" />);
     }
 
-    // Preenche com estrelas vazias restantes até o total de 5
     const totalStars = starArray.length;
     for (let i = 0; i < 5 - totalStars; i++) {
       starArray.push(<BsStar key={`empty-${i}`} className="text-warning" />);
@@ -112,19 +106,25 @@ const ProdutosDetalhes: React.FC = () => {
     return starArray;
   };
 
+  if (loading) return <Loader />;
+  if (erro) return <div>{erro}</div>;
+  if (!produto) return null;
+
   return (
     <Container className="mt-5">
       <Row>
         <Col lg={1}>
-          {miniaturas.map((miniatura, index) => (
+          {imagensFiltradas.map((imagem, index) => (
             <Row key={index}>
               <ColCuston md={11} className="m-2">
-                <ImagemProduto
-                  src={miniatura}
-                  alt={`Produto ${index + 1}`}
-                  onClick={() => trocarImagemPrincipal(miniatura)}
-                  onMouseOver={() => trocarImagemPrincipal(miniatura)}
-                />
+                {imagem && typeof imagem === "string" && (
+                  <ImagemProduto
+                    src={imagem}
+                    alt={`Miniatura ${index + 1}`}
+                    onClick={() => trocarImagemPrincipal(imagem)}
+                    onMouseOver={() => trocarImagemPrincipal(imagem)}
+                  />
+                )}
               </ColCuston>
             </Row>
           ))}
@@ -132,41 +132,49 @@ const ProdutosDetalhes: React.FC = () => {
         <Col lg={5} md={6}>
           <CarouselCuston
             className="m-2"
-            activeIndex={miniaturas.indexOf(imagemPrincipal)}
+            activeIndex={imagensFiltradas.indexOf(imagem_principal as string)}
             interval={null}
             nextIcon={null}
             prevIcon={null}
             indicators={false}
           >
-            {miniaturas.map((miniatura, index) => (
+            {imagensFiltradas.map((imagem, index) => (
               <Carousel.Item key={index}>
-                <ImagemProduto src={miniatura} alt={`Produto ${index + 1}`} />
+                {typeof imagem === "string" && (
+                  <ImagemProduto
+                    src={imagem}
+                    alt={`Miniatura ${index + 1}`}
+                    onClick={() => trocarImagemPrincipal(imagem)}
+                    onMouseOver={() => trocarImagemPrincipal(imagem)}
+                  />
+                )}
               </Carousel.Item>
             ))}
           </CarouselCuston>
         </Col>
         <ColCuston2 lg={5} md={6} className="mt-2">
-          <TituloProduto>{products[0].name}</TituloProduto>
+          <TituloProduto>{produto.nome}</TituloProduto>
           <DetalhesContent>
             <Avaliacao>
               <Paragrafo>
-                Vendido e entregue por:{" "}
-                <ParagrafoB>{products[0].empresa}</ParagrafoB>
+                Vendido e entregue por: <ParagrafoB>Plaza</ParagrafoB>
               </Paragrafo>
-              <span className="me-2 mt-1">Avaliação: ({products[0].star})</span>
-              <div className="rating">{renderStars(products[0].star)}</div>
+              <span className="me-2 mt-1">
+                Avaliação: ({produto.avaliacao})
+              </span>
+              <div className="rating">{renderStars(produto.avaliacao)}</div>
             </Avaliacao>
             <PrecoContent>
-              {products[0].oldPrice && (
+              {produto.valor_antigo && (
                 <PrecoAntigo className="text-muted text-decoration-line-through">
-                  R$ {products[0].oldPrice.toFixed(2)}
+                  R$ {produto.valor_antigo}
                 </PrecoAntigo>
               )}
-              <Preco>R$ {products[0].price.toFixed(2)}</Preco>
+              <Preco>R$ {produto.valor}</Preco>
               <Pix>
                 no Pix{" "}
                 <span className="text-success">
-                  <b>{products[0].desconto}</b>
+                  <b>{produto.desconto}</b>
                 </span>
               </Pix>
             </PrecoContent>
@@ -181,4 +189,5 @@ const ProdutosDetalhes: React.FC = () => {
     </Container>
   );
 };
+
 export default ProdutosDetalhes;

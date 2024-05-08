@@ -1,7 +1,7 @@
 import { SpinnerHome, Spinner, SpinnerText } from "@/styles/LoaderStyles";
 import React from "react";
 
-export const Loader: React.FC = () => {
+const Loader: React.FC = () => {
   return (
     <SpinnerHome>
       <Spinner />
@@ -9,3 +9,4 @@ export const Loader: React.FC = () => {
     </SpinnerHome>
   );
 };
+export default Loader;

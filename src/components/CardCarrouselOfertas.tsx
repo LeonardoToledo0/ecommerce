@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/router";
 import { RootState } from "../redux/configureStore";
 import {
   setLoading,
@@ -23,7 +24,7 @@ import {
   SetaCard1,
   SetaCard2,
 } from "@/styles/StylesNavbar-Menu";
-import { Loader } from "./Loader";
+import Loader from "./Loader";
 
 const CustomPrevArrow = ({ onClick = () => {} }: { onClick?: () => void }) => (
   <SetaCard2 onClick={onClick} className="custom-prev-arrow">
@@ -41,6 +42,10 @@ const API_PRODUTOS = process.env.NEXT_PUBLIC_PRODUTOS_OFERTAS || "";
 
 const CardCarrouselOfertas: React.FC = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
+  const handleProdutoDetalhes = (productId: number) => {
+    router.push(`/produtos_detalhes?id=${productId}`);
+  };
   const { produto, loading, erro, sucesso } = useSelector(
     (state: RootState) => state.carouselOfertas
   );
@@ -108,7 +113,7 @@ const CardCarrouselOfertas: React.FC = () => {
             <Row>
               <Col lg={3} md={6} sm={12}>
                 <div className="card">
-                  <NewLink href={`/produtos_detalhes?id=${produto.id}`}>
+                  <a onClick={() => handleProdutoDetalhes(produto.id)}>
                     <NewImage
                       src={produto.imagem_principal}
                       className="card-img-top"
@@ -142,7 +147,7 @@ const CardCarrouselOfertas: React.FC = () => {
                         </p>
                       </div>
                     </div>
-                  </NewLink>
+                  </a>
                 </div>
               </Col>
             </Row>

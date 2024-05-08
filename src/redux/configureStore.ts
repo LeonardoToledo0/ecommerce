@@ -4,6 +4,7 @@ import categoriaReducer from "./categoriaSlice";
 import marcaReducer from "./marcaSlice";
 import bannerReducer from "./bannersSlice";
 import carouselOfertasReducer from "./carouselOfertasSlice";
+import produtoDetalhesReducer from "./produtoDetalhesSlice";
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     marca: marcaReducer,
     banner: bannerReducer,
     carouselOfertas: carouselOfertasReducer,
+    produtoDetalhes: produtoDetalhesReducer,
   },
 });
 
