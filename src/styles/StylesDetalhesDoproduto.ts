@@ -25,6 +25,7 @@ export const ColCuston = styled(Col)`
   justify-content: center;
   height: 100px;
   padding: 3%;
+  overflow: hidden;
   background: #ffff;
   border: 1px solid ${corSecundaria};
   border-radius: 8px;

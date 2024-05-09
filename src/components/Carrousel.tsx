@@ -1,6 +1,6 @@
 import React from "react";
 import Carousel from "react-bootstrap/Carousel";
-import { NewImage, Seta1, Seta2 } from "@/styles/StylesNavbar-Menu";
+import { NewImage, Seta1, Seta2, Container } from "@/styles/StylesNavbar-Menu";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 
 const banners = [
@@ -29,22 +29,24 @@ const Carrousel: React.FC = () => {
   };
 
   return (
-    <Carousel
-      activeIndex={index}
-      onSelect={handleSelect}
-      prevIcon={<CustomPrevArrow />}
-      nextIcon={<CustomNextArrow />}
-    >
-      {banners.map((banner) => (
-        <Carousel.Item key={banner.id}>
-          <NewImage
-            src={banner.url}
-            className="d-block container"
-            alt={`Banner ${banner.id}`}
-          />
-        </Carousel.Item>
-      ))}
-    </Carousel>
+    <Container>
+      <Carousel
+        activeIndex={index}
+        onSelect={handleSelect}
+        prevIcon={<CustomPrevArrow />}
+        nextIcon={<CustomNextArrow />}
+      >
+        {banners.map((banner) => (
+          <Carousel.Item key={banner.id}>
+            <NewImage
+              src={banner.url}
+              className="d-block container"
+              alt={`Banner ${banner.id}`}
+            />
+          </Carousel.Item>
+        ))}
+      </Carousel>
+    </Container>
   );
 };
 

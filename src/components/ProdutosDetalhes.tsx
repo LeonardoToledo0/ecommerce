@@ -172,9 +172,12 @@ const ProdutosDetalhes: React.FC = () => {
               )}
               <Preco>R$ {produto.valor}</Preco>
               <Pix>
-                no Pix{" "}
                 <span className="text-success">
-                  <b>{produto.desconto}</b>
+                  (no Pix{" "}
+                  <b>
+                    {Number(produto.desconto).toFixed(2).split(".")[0]}% de
+                    desconto)
+                  </b>
                 </span>
               </Pix>
             </PrecoContent>

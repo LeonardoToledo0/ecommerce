@@ -206,8 +206,8 @@ export const SetaCard1 = styled.div`
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  margin-right: -220px;
-  color: ${corPrimaria};
+  margin-right: -210px;
+  color: ${corSecundaria};
   width: 50px;
   height: 50px;
   font-size: 2rem;
@@ -217,8 +217,8 @@ export const SetaCard2 = styled.div`
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  margin-left: -220px;
-  color: ${corPrimaria};
+  margin-left: -210px;
+  color: ${corSecundaria};
   width: 50px;
   height: 50px;
   font-size: 2rem;
@@ -260,3 +260,17 @@ export const Titulos = styled.h2`
   background-clip: text;
   -webkit-text-fill-color: transparent;
 `;
+
+export const ValorFixo = styled.h3`
+  margin-top: -18px;
+  display: flex;
+  align-items: baseline;
+  justify-content: start;
+  gap: 10px;
+`;
+
+export const SpanPix = styled.span`
+  font-size: 1rem;
+`;
+
+export const Card = styled.div``;

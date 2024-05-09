@@ -12,7 +12,7 @@ import {
   setStatus,
   setSucesso,
   resetBannerState,
-} from "@/redux/bannersSlice";
+} from "@/redux/bannersOfertasSlice";
 
 interface AdicionarBannersProps {}
 
@@ -21,7 +21,7 @@ const API_BANNERS = process.env.NEXT_PUBLIC_BANNERS_ADICIONAR || "";
 const AdicionarBannerPrincipal: React.FC<AdicionarBannersProps> = () => {
   const dispatch = useDispatch();
   const { nome, ativo, erro, sucesso, imagem, status } = useSelector(
-    (state: RootState) => state.banner
+    (state: RootState) => state.bannerOfertas
   );
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

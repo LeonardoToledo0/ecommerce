@@ -12,28 +12,28 @@ interface Produto {
   status: string;
 }
 
-interface CarouselOfertasState {
+interface CarouselDestaquesState {
   produto: Produto[];
   loading: boolean;
   sucesso: boolean;
   erro: string | null;
 }
 
-const initialState: CarouselOfertasState = {
+const initialState: CarouselDestaquesState = {
   produto: [],
   loading: true,
   sucesso: false,
   erro: null,
 };
 
-const carouselOfertasSlice = createSlice({
-  name: "carouselOfertas",
+const carouselDestaquesSlice = createSlice({
+  name: "carouselDestaques",
   initialState,
   reducers: {
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
     },
-    setProduto: (state, action: PayloadAction<Produto[]>) => {
+    setProduto: (state, action: PayloadAction<any[]>) => {
       state.produto = action.payload;
     },
     setSucesso: (state, action: PayloadAction<boolean>) => {
@@ -42,7 +42,7 @@ const carouselOfertasSlice = createSlice({
     setErro: (state, action: PayloadAction<string | null>) => {
       state.erro = action.payload;
     },
-    resetCarouselOfertasState: (state) => {
+    resetCarouselDestaquesState: (state) => {
       state.loading = true;
       state.produto = [];
       state.sucesso = false;
@@ -56,6 +56,6 @@ export const {
   setProduto,
   setSucesso,
   setErro,
-  resetCarouselOfertasState,
-} = carouselOfertasSlice.actions;
-export default carouselOfertasSlice.reducer;
+  resetCarouselDestaquesState,
+} = carouselDestaquesSlice.actions;
+export default carouselDestaquesSlice.reducer;

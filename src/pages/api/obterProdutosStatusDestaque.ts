@@ -6,11 +6,10 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
-    const { rows } = await pool.query(
-      "SELECT * FROM produtos WHERE status = 'Oferta'"
-    );
+    const queryString = "SELECT * FROM produtos WHERE status = 'Destaque'";
+    const { rows } = await pool.query(queryString);
     res.status(200).json(rows);
   } catch (error) {
-    res.status(500).json({ message: "Erro ao obter as produtos" });
+    res.status(500).json({ message: "Erro ao obter os produtos em destaque" });
   }
 }

@@ -1,61 +1,64 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+
 interface BannerState {
+  banner: any[];
+  imagem: string;
   nome: string;
-  ativo: string;
-  status: string;
   sucesso: boolean;
   erro: string | null;
-  imagem: File | null;
+  loading: boolean;
 }
+
 const initialState: BannerState = {
-  nome: "",
-  ativo: "",
-  status: "",
+  banner: [],
   sucesso: false,
   erro: null,
-  imagem: null,
+  loading: true,
+  imagem: "",
+  nome: "",
 };
 
 const bannerSlice = createSlice({
   name: "banner",
   initialState,
   reducers: {
-    setNome(state, action: PayloadAction<string>) {
+    setBanner: (state, action: PayloadAction<any[]>) => {
+      state.banner = action.payload;
+    },
+    setNome: (state, action: PayloadAction<string>) => {
       state.nome = action.payload;
     },
-    setAtivo(state, action: PayloadAction<string>) {
-      state.ativo = action.payload;
+    setImagem: (state, action: PayloadAction<string>) => {
+      state.imagem = action.payload;
     },
-    setStatus(state, action: PayloadAction<string>) {
-      state.status = action.payload;
-    },
+
     setSucesso(state, action: PayloadAction<boolean>) {
       state.sucesso = action.payload;
     },
     setErro(state, action: PayloadAction<string | null>) {
       state.erro = action.payload;
     },
-    setImagem(state, action: PayloadAction<File | null>) {
-      state.imagem = action.payload;
+    setLoading: (state, action: PayloadAction<boolean>) => {
+      state.loading = action.payload;
     },
     resetBannerState(state) {
-      state.nome = "";
-      state.ativo = "";
-      state.status = "";
-      state.sucesso = false;
+      state.banner = [];
+      state.sucesso = true;
       state.erro = null;
-      state.imagem = null;
+      state.loading = true;
+      state.nome = "";
+      state.imagem = "";
     },
   },
 });
 
 export const {
-  setNome,
-  setAtivo,
-  setStatus,
+  setBanner,
   setSucesso,
   setErro,
+  setLoading,
   setImagem,
+  setNome,
   resetBannerState,
 } = bannerSlice.actions;
 

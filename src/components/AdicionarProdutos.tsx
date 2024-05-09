@@ -374,6 +374,7 @@ const AdicionarProdutos: React.FC<AdicionarProdutosProps> = () => {
             <option value="">Selecione</option>
             <option value="Oferta">Oferta</option>
             <option value="Destaque">Destaque</option>
+            <option value="Patrocinado">Patrocinado</option>
           </select>
         </div>
         <div className="form-group col-md-8 mt-3">

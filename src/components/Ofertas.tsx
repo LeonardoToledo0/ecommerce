@@ -19,10 +19,12 @@ import {
   BsStar,
 } from "react-icons/bs";
 import {
+  Card,
   NewImage,
-  NewLink,
   SetaCard1,
   SetaCard2,
+  SpanPix,
+  ValorFixo,
 } from "@/styles/StylesNavbar-Menu";
 import Loader from "./Loader";
 
@@ -38,9 +40,20 @@ const CustomNextArrow = ({ onClick = () => {} }: { onClick?: () => void }) => (
   </SetaCard1>
 );
 
-const API_PRODUTOS = process.env.NEXT_PUBLIC_PRODUTOS_OFERTAS || "";
+const API_PRODUTOS_OFERTA = process.env.NEXT_PUBLIC_PRODUTOS_OFERTAS || "";
+interface Produto {
+  id: number;
+  sku: string;
+  nome: string;
+  ativo: string;
+  valor: number;
+  status: string;
+  imagem_principal: string;
+  avaliacao: number;
+  valor_antigo: number;
+}
 
-const CardCarrouselOfertas: React.FC = () => {
+const Ofertas: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const handleProdutoDetalhes = (productId: number) => {
@@ -53,8 +66,9 @@ const CardCarrouselOfertas: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(API_PRODUTOS);
-        dispatch(setProduto(response.data));
+        const response = await axios.get(API_PRODUTOS_OFERTA);
+        const produtos = response.data;
+        dispatch(setProduto(produtos));
       } catch (error) {
         dispatch(
           setErro(
@@ -100,6 +114,18 @@ const CardCarrouselOfertas: React.FC = () => {
     return <p>{erro}</p>;
   }
 
+  // Agrupar os produtos em grupos de 4
+  const groupedProducts = produto.reduce(
+    (acc: Produto[][], item: Produto, index: number) => {
+      if (index % 4 === 0) {
+        acc.push([]);
+      }
+      acc[acc.length - 1].push(item);
+      return acc;
+    },
+    []
+  );
+
   return (
     <Container className="mt-4">
       <Carousel
@@ -108,48 +134,50 @@ const CardCarrouselOfertas: React.FC = () => {
         prevIcon={<CustomPrevArrow />}
         nextIcon={<CustomNextArrow />}
       >
-        {produto.map((produto, index) => (
-          <Carousel.Item key={index}>
+        {groupedProducts.map((group: Produto[], groupIndex: number) => (
+          <Carousel.Item key={groupIndex}>
             <Row>
-              <Col lg={3} md={6} sm={12}>
-                <div className="card">
-                  <a onClick={() => handleProdutoDetalhes(produto.id)}>
-                    <NewImage
-                      src={produto.imagem_principal}
-                      className="card-img-top"
-                      alt={produto.nome}
-                    />
+              {group.map((item: Produto) => (
+                <Col key={item.id} lg={3} md={6} sm={12}>
+                  <Card className="card h-100 shadow-md ">
+                    <div
+                      className="badge bg-primary text-white position-absolute"
+                      style={{ top: "0.5rem", right: "0.5rem" }}
+                    >
+                      {item.status}
+                    </div>
+                    <a onClick={() => handleProdutoDetalhes(item.id)}>
+                      <NewImage
+                        src={item.imagem_principal}
+                        className="card-img-top"
+                        alt={item.nome}
+                      />
 
-                    <div className="card-body">
-                      <h5 className="card-title">{produto.nome}</h5>
+                      <div className="card-body">
+                        <h6 className="card-title">{item.nome}</h6>
 
-                      <div className="d-flex align-items-center">
-                        <span className="me-2 mt-1">
-                          Avaliação: ({produto.avaliacao})
-                        </span>
-                        <div className="rating">
-                          {renderStars(produto.avaliacao)}
+                        <div className="d-flex align-items-center">
+                          <span className="me-2 mt-1">
+                            Avaliação: ({item.avaliacao})
+                          </span>
+                          <div className="rating">
+                            {renderStars(item.avaliacao)}
+                          </div>
+                        </div>
+                        <div className=" justify-content-between align-items-center ">
+                          <p className="text-muted text-decoration-line-through ">
+                            R$ {Number(item.valor_antigo).toFixed(2)}
+                          </p>
+                          <ValorFixo>
+                            R$ {Number(item.valor).toFixed(2)}{" "}
+                            <SpanPix>no pix</SpanPix>
+                          </ValorFixo>
                         </div>
                       </div>
-                      <div className="d-flex justify-content-between align-items-center mt-3">
-                        <span className="text-muted text-decoration-line-through">
-                          R$ {Number(produto.valor_antigo).toFixed(2)}
-                        </span>
-                        <span className="h5">
-                          R$ {Number(produto.valor).toFixed(2)}
-                        </span>
-                        <p>
-                          no Pix{" "}
-                          <span className="text-success">
-                            (<b>{produto.desconto.slice(0, -3)}</b>% de
-                            desconto)
-                          </span>
-                        </p>
-                      </div>
-                    </div>
-                  </a>
-                </div>
-              </Col>
+                    </a>
+                  </Card>
+                </Col>
+              ))}
             </Row>
           </Carousel.Item>
         ))}
@@ -157,4 +185,4 @@ const CardCarrouselOfertas: React.FC = () => {
     </Container>
   );
 };
-export default CardCarrouselOfertas;
+export default Ofertas;
