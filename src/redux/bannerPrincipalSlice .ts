@@ -1,0 +1,75 @@
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+
+interface Banner {
+  id: number;
+  nome: string;
+  imagem: string;
+  erro: string;
+  sucesso: boolean;
+  ativo: string;
+  status: string;
+}
+
+interface BannerPrincipalState {
+  banner: Banner[];
+  imagem: string;
+  nome: string;
+  sucesso: boolean;
+  erro: string | null;
+  loading: boolean;
+}
+
+const initialState: BannerPrincipalState = {
+  banner: [],
+  sucesso: false,
+  erro: null,
+  loading: true,
+  imagem: "",
+  nome: "",
+};
+
+const bannerPrincipalSlice = createSlice({
+  name: "bannerPrincipal",
+  initialState,
+  reducers: {
+    setBanner: (state, action: PayloadAction<any[]>) => {
+      state.banner = action.payload;
+    },
+    setNome: (state, action: PayloadAction<string>) => {
+      state.nome = action.payload;
+    },
+    setImagem: (state, action: PayloadAction<string>) => {
+      state.imagem = action.payload;
+    },
+
+    setSucesso(state, action: PayloadAction<boolean>) {
+      state.sucesso = action.payload;
+    },
+    setErro(state, action: PayloadAction<string | null>) {
+      state.erro = action.payload;
+    },
+    setLoading: (state, action: PayloadAction<boolean>) => {
+      state.loading = action.payload;
+    },
+    resetBannerState(state) {
+      state.banner = [];
+      state.sucesso = true;
+      state.erro = null;
+      state.loading = true;
+      state.nome = "";
+      state.imagem = "";
+    },
+  },
+});
+
+export const {
+  setBanner,
+  setSucesso,
+  setErro,
+  setLoading,
+  setImagem,
+  setNome,
+  resetBannerState,
+} = bannerPrincipalSlice.actions;
+
+export default bannerPrincipalSlice.reducer;
